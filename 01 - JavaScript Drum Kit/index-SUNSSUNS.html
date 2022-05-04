@@ -56,34 +56,45 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      function playsound(e) {
-        // 获取音频对象
-        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-        // 获取字母对象
-        const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-        // 确保音频引入成功
-        if (!audio) return;
-        // console.dir(audio);
-        // 为字母添加亮边类
-        key.classList.add("playing");
-        // 重置当前播放位置为0
-        audio.currentTime = 0;
-        // 音频播放
-        audio.play();
-      }
-      function removePlayingClass(e) {
-        // 删除亮边类
-        if (e.propertyName !== "transform") return;
-        console.log(e);
-        e.target.classList.remove("playing"); // 每次每个key对象都执行这行代码，耗性能
-      }
-      // 监听按下任意按键事件
-      window.addEventListener("keydown", playsound);
-      // 监听css过渡
-      const keys = document.querySelectorAll(".key");
-      keys.forEach((key) =>
-        key.addEventListener("transitionend", removePlayingClass)
-      );
+      //立即执行函数可以防止变量名污染作用域，避免冲突
+      (function () {
+        function playsound(e) {
+          // 获取音频对象
+          const audio = document.querySelector(
+            `audio[data-key="${e.keyCode}"]`
+          );
+          // 获取字母对象
+          const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+
+          // 确保dom存在
+          if (key) {
+            // 为字母添加亮边类
+            key.classList.add("playing");
+          }
+          // 确保音频引入成功
+          if (audio) {
+            // 为了连续播放，重置当前播放位置为0
+            audio.currentTime = 0;
+            // 音频播放
+            audio.play();
+          }
+
+          // console.dir(audio);
+        }
+        function removePlayingClass(e) {
+          // 删除亮边类
+          if (e.propertyName !== "transform") return;
+          console.log(e);
+          e.target.classList.remove("playing"); // 每次每个key对象都执行这行代码，耗性能
+        }
+        // 监听按下任意按键事件
+        window.addEventListener("keydown", playsound);
+        // 监听css过渡
+        const keys = document.querySelectorAll(".key");
+        keys.forEach((key) =>
+          key.addEventListener("transitionend", removePlayingClass)
+        );
+      })();
     </script>
   </body>
 </html>
