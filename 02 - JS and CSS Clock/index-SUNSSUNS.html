@@ -7,9 +7,9 @@
   <body>
     <div class="clock">
       <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand hour-hand"></div>
       </div>
     </div>
 
@@ -51,41 +51,79 @@
           -3px
         ); /* account for the height of the clock hands */
       }
-
-      .hand {
-        width: 50%;
-        height: 6px;
-        background: black;
+      .clock-face::after {
         position: absolute;
         top: 50%;
-        transform-origin: 100%;
-        transform: rotate(90deg);
-        animation: all 0.5s;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        content: "";
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: white;
+      }
+      .hand {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .second-hand::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 50%;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+      }
+      .min-hand::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 40%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-100%);
+        background-color: pink;
+      }
+      .hour-hand::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 30%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-100%);
+        background-color: blueviolet;
       }
     </style>
 
     <script>
-      function setDate() {
-        // 获取当前时间
-        const date = new Date();
-        const h = date.getHours();
-        const m = date.getMinutes();
-        const s = date.getSeconds();
-        // 设置秒针初始位置
-        let second = document.querySelector(".second-hand");
-        let secondsDegrees = (s / 60) * 360 + 90;
-        second.style.transform = `rotate(${secondsDegrees}deg)`;
-        // 设置分针初始位置
-        let min = document.querySelector(".min-hand");
-        let minsDegrees = (m * 360) / 60 + (s / 60) * 6 + 90;
-        min.style.transform = `rotate(${minsDegrees}deg)`;
-        // 设置时针初始位置
-        let hour = document.querySelector(".hour-hand");
-        let hourDegrees = (h / 12) * 360 + (m / 60) * 30 + 90;
-        hour.style.transform = `rotate(${hourDegrees}deg)`;
-      }
-      setDate();
-      setInterval(setDate,1000)
+      ;(function() {
+        function setDate() {
+          // 获取当前时间
+          const date = new Date();
+          const h = date.getHours();
+          const m = date.getMinutes();
+          const s = date.getSeconds();
+          // 设置秒针初始位置
+          let second = document.querySelector(".second-hand");
+          let secondsDegrees = (s / 60) * 360;
+          second.style.transform = `rotate(${secondsDegrees}deg)`;
+          // 设置分针初始位置
+          let min = document.querySelector(".min-hand");
+          let minsDegrees = (m * 360) / 60 + (s / 60) * 6;
+          min.style.transform = `rotate(${minsDegrees}deg)`;
+          // 设置时针初始位置
+          let hour = document.querySelector(".hour-hand");
+          let hourDegrees = (h / 12) * 360 + (m / 60) * 30;
+          hour.style.transform = `rotate(${hourDegrees}deg)`;
+        }
+        setDate();
+        setInterval(setDate,1000);
+      })()
     </script>
   </body>
 </html>
