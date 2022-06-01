@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Reference VS Copy</title>
+  </head>
+  <body>
+    <script>
+      // start with strings, numbers and booleans
+      let str1 = "hello";
+      let str2 = str1;
+      console.log(str1, str2);
+      str1 = "world";
+      console.log(str1, str2);
+      // Let's say we have an array
+      const players = ["Wes", "Sarah", "Ryan", "Poppy"];
+      // and we want to make a copy of it.
+      const array = players;
+      console.log(players, array);
+      players[0] = "front-end";
+      console.log(players, array);
+      // You might think we can just do something like this:
+
+      // however what happens when we update that array?
+
+      // now here is the problem!
+
+      // oh no - we have edited the original array too!
+
+      // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+      // So, how do we fix this? We take a copy instead!
+
+      // one way
+      /*
+      * slice()和concat()缺点：
+      当数组内部属性值为引用对象时，使用slice和concat对对象数组的拷贝，
+      整个拷贝还是浅拷贝，拷贝之后数组各个值的指针还是指向相同的存储地址。
+      简单来说就是：
+      数组中的值如果是引用类型，对其进行增删改，会影响用slice复制的数组，
+      但是如果数组中的值是基本类型，就不会影响
+      */
+      const arr1 = players.slice();
+      console.log(players, arr1);
+      arr1[0] = "arr1";
+      console.log(players, arr1);
+      // or create a new array and concat the old one in
+      const arr2 = players.concat();
+      console.log(players, arr2);
+      arr2[0] = "arr2";
+      console.log(players, arr2);
+      // or use the new ES6 Spread
+      const arr3 = [...players];
+      console.log(players, arr3);
+      arr3[0] = "arr3";
+      console.log(players, arr3);
+      // now when we update it, the original one isn't changed
+      const arr4 = Array.from(players);
+      console.log(players, arr4);
+      arr4[0] = "arr4";
+      console.log(players, arr4);
+      // The same thing goes for objects, let's say we have a person object
+
+      // with Objects
+      const person = {
+        name: "Wes Bos",
+        age: 80,
+      };
+
+      // and think we make a copy:
+      const person1 = person;
+      console.log(person, person1);
+      person1.name = "person1";
+      console.log(person, person1);
+      // how do we take a copy instead?
+      const person2 = JSON.parse(JSON.stringify(person));
+      console.log(person, person2);
+      person2.name = "person2";
+      console.log(person, person2);
+      // We will hopefully soon see the object ...spread
+
+      // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    </script>
+  </body>
+</html>
